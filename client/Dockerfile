@@ -3,7 +3,9 @@ WORKDIR /app
 COPY package.json .
 RUN npm i
 COPY . .
-CMD ["npm", "run", "build"]
+# not CMD["npm", "run", "build"]
+# we need to build directly!
+RUN npm run build
 
 FROM nginx
 EXPOSE 3000
