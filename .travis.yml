@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t stanlee94/react-client -f ./client/Dockerfile.dev ./client
+
+# Exit with non-zero code will fail your test
+script:
+  - docker run -e CI=true stanlee94/react-client npm run test
+
+after_success:
+  - docker build -t stanlee94/client -f ./client
+  - docker build -t stanlee94/nginx -f ./nginx
+  - docker build -t stanlee94/server -f ./server
+  - docker build -t stanlee94/worker -f ./worker
+  # Push all images to Docker Hub
+  # Log in Docker CLI
+  - echo "$DOCKER_PW" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push stanlee94/client
+  - docker push stanlee94/nginx
+  - docker push stanlee94/server
+  - docker push stanlee94/worker
