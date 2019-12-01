@@ -5,25 +5,29 @@
       "name": "multi-client",
       "image": "stanlee94/client",
       "hostname": "client",
-      "essential": false
+      "essential": false,
+      "memory": 128
     },
     {
       "name": "multi-server",
       "image": "stanlee94/server",
       "hostname": "api",
-      "essential": false
+      "essential": false,
+      "memory": 128
     },
     {
       "name": "multi-worker",
       "image": "stanlee94/worker",
       "hostname": "worker",
-      "essential": false
+      "essential": false,
+      "memory": 128
     },
     {
       "name": "multi-nginx",
       "image": "stanlee94/nginx",
       "hostname": "nginx",
       "essential": true,
+      "memory": 128,
       "portMappings": [
         {
           "hostPort": 80,
