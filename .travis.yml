@@ -21,3 +21,15 @@ after_success:
   - docker push stanlee94/nginx
   - docker push stanlee94/server
   - docker push stanlee94/worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: ap-southeast-1
+  app: multi-container-docker
+  env: MultiContainerDocker-env
+  bucket_name: elasticbeanstalk-ap-southeast-1-214095551659
+  bucket_path: multi-container-docker
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
