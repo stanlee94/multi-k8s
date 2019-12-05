@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  # Number of pods
+  replicas: 1
+  selector:
+    matchLabels:
+      component: postgres
+  # When the pod is created, it needs to tied to the storage in the Persistent Volume Claim
+  # Attach PVC to Pod Config
+  template:
+    metadata:
+      labels:
+        component: postgres
+    spec:
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: database-persistent-volume-claim
+      containers:
+        - name: postgres
+          image: postgres
+          # When postgres detected a name of PGPASSWORD
+          # of environment variable, it will automatically
+          # change its default password
+          env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pgpassword
+                  key: PGPASSWORD
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            # find the storage named postgres-storage
+            - name: postgres-storage
+              # mount the volume to file path inside container
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
